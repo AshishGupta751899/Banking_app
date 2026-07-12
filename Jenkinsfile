@@ -8,28 +8,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t banking-app:latest .'
-            }
-        }
-
-        stage('Stop Old Container') {
+        stage('Build & Deploy') {
             steps {
                 sh '''
-                docker stop banking-app || true
-                docker rm banking-app || true
-                '''
-            }
-        }
-
-        stage('Run Container') {
-            steps {
-                sh '''
-                docker run -d \
-                --name banking-app \
-                -p 5000:5000 \
-                banking-app:latest
+                docker compose down || true
+                docker compose up -d --build
                 '''
             }
         }
