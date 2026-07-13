@@ -9,13 +9,15 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t banking_app-app:latest .'
+                sh '''
+                docker build -t banking-app:latest .
+                '''
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Container') {
             steps {
                 sh '''
                 docker stop banking-app || true
@@ -23,29 +25,9 @@ pipeline {
 
                 docker run -d \
                   --name banking-app \
-                  --network bridge \
                   --env-file .env \
                   -p 5000:5000 \
-                  banking_app-app:latest
-                '''
-            }
-        }
-    }
-}pipeline {
-    agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Build & Deploy') {
-            steps {
-                sh '''
-                docker compose down || true
-                docker compose up -d --build
+                  banking-app:latest
                 '''
             }
         }
