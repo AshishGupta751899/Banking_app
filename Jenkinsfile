@@ -9,9 +9,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Image') {
             steps {
-                sh 'docker build -t banking-app:latest .'
+                sh '''
+                docker build -t banking-app:latest .
+                '''
             }
         }
 
@@ -24,6 +26,7 @@ pipeline {
                 docker run -d \
                   --name banking-app \
                   --network bridge \
+                  --link banking-mysql:mysql \
                   --env-file .env \
                   -p 5000:5000 \
                   banking-app:latest
