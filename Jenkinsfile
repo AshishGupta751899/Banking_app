@@ -20,6 +20,8 @@ pipeline {
          stage('Deploy') {
     steps {
         sh '''
+        cp /home/ubuntu/Banking_app/.env . || true
+
         docker stop banking-app || true
         docker rm banking-app || true
 
@@ -30,7 +32,7 @@ pipeline {
         -p 5000:5000 \
         banking-app:latest
         '''
-         }
        }
+      }
     }
 }
