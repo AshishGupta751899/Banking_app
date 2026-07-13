@@ -11,13 +11,11 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                docker build -t banking-app:latest .
-                '''
+                sh 'docker build -t banking-app:latest .'
             }
         }
 
-        stage('Deploy Container') {
+        stage('Deploy') {
             steps {
                 sh '''
                 docker stop banking-app || true
@@ -25,6 +23,7 @@ pipeline {
 
                 docker run -d \
                   --name banking-app \
+                  --network bridge \
                   --env-file .env \
                   -p 5000:5000 \
                   banking-app:latest
