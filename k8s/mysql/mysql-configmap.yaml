@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: banking
+data:
+  MYSQL_DATABASE: banking_db
